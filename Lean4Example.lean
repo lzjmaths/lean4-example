@@ -1,7 +1,14 @@
-open Nat (add_assoc add_comm)
+import Mathlib.Data.Nat.Choose.Sum
 
-theorem hello_world (a b c : Nat)
-  : a + b + c = a + c + b := by
-  rw [add_assoc, add_comm b, ←add_assoc]
+#align_import data.nat.choose.sum from "leanprover-community/mathlib"@"4c19a16e4b705bf135cf9a80ac18fcc99c438514"
 
-theorem foo (a : Nat) : a + 1 = Nat.succ a := by rfl
+open Nat
+
+--原始定理
+theorem a_theorem (h1:1 ≤ n)(h2:1 ≤ k) : choose n k = choose (n-1) k  + choose (n-1) (k-1) := by
+  have choose_eq_choose_sub_add :  choose n k = choose (n - 1 + 1) (k - 1 + 1)  := by
+    rw[Nat.sub_add_cancel h1, Nat.sub_add_cancel h2]
+  rw[choose_eq_choose_sub_add]
+  rw[add_comm (choose (n - 1) k) (choose (n - 1) (k - 1))]
+  have choose_sub_eq_choose_sub_add : choose (n - 1) k = choose (n - 1) (k - 1 + 1) := by rw[Nat.sub_add_cancel h2]
+  rw[choose_sub_eq_choose_sub_add, choose_succ_succ]
